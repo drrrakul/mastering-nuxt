@@ -1,5 +1,9 @@
 export default {
   components: true,
+  publicRuntimeConfig: {
+    MAPS_API_KEY: process.env.MAPS_API_KEY
+  },
+  privateRuntimeConfig: {},
   head: {
     titleTemplate: "Mastering Nuxt: %s",
     htmlAttrs: {

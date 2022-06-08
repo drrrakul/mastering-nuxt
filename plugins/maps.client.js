@@ -1,6 +1,7 @@
 export default function(context, inject) {
   let mapLoaded = false;
   let mapWaiting = null;
+  const API_KEY = context.$config.MAPS_API_KEY;
   
   addScript();
 
@@ -10,7 +11,7 @@ export default function(context, inject) {
 
   function addScript() {
     const script = document.createElement('script');
-    script.src = "https://maps.googleapis.com/maps/api/js?key=AIzaSyBHHwv3cjtzE53iL-wP8IciO-DMWGFSZ-0&libraries=places&callback=initMap";
+    script.src = `https://maps.googleapis.com/maps/api/js?key=${API_KEY}&libraries=places&callback=initMap`;
     script.async = true;
     window.initMap = initMap;
     document.head.appendChild(script);
