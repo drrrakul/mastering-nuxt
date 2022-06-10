@@ -1,9 +1,12 @@
 export default {
   components: true,
   publicRuntimeConfig: {
-    MAPS_API_KEY: process.env.MAPS_API_KEY
+    MAPS_API_KEY: process.env.MAPS_API_KEY,
+    ALGOLIA_SEARCH_API_KEY: process.env.ALGOLIA_SEARCH_API_KEY,
   },
-  privateRuntimeConfig: {},
+  privateRuntimeConfig: {
+    ALGOLIA_ADMIN_API_KEY: process.env.ALGOLIA_ADMIN_API_KEY,
+  },
   head: {
     titleTemplate: "Mastering Nuxt: %s",
     htmlAttrs: {
