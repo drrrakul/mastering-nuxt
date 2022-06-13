@@ -7,5 +7,8 @@
     "dev": "nuxt",
     "build": "nuxt build",
     "start": "nuxt start"
+  },
+  "devDependencies": {
+    "@nuxtjs/tailwindcss": "^5.1.2"
   }
 }
