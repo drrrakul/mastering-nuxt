@@ -1,5 +1,10 @@
 <template>
-<div>
+<div class="app-search-result-page">
+  <div class="app-search-results">
+    <div class="app-search-results-listing">
+      <h2 class="app-title"></h2>
+    </div>
+  </div>
   Results for {{ label }}
   <div style="height:400px;width:400px;float:right;" ref="map"></div>
   <div v-if="homes.length === 0">No results found</div>
