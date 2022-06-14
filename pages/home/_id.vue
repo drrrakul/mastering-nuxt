@@ -16,9 +16,6 @@ export default {
             title: this.home.title,
         };
     },
-    mounted() {
-        this.$maps.showMap(this.$refs.map, this.home._geoloc.lat, this.home._geoloc.lng);
-    },
     async asyncData({ params, $dataApi, error }) {
       const responses = await Promise.all([
         $dataApi.getHome(params.id),
