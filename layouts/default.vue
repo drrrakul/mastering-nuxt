@@ -15,7 +15,11 @@
     <div class="app-user-menu">
       <img src="/images/icons/house.svg">
       <div class="name">Host</div>
-      <div id="googleButton"></div>
+      <div
+        id="g_id_onload"
+        :data-client_id="$config.auth.clientId"
+        data-callback="initAuth"
+      ></div>
     </div>
   </header>
   <nuxt/>
