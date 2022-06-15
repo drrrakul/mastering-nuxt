@@ -1,21 +1,63 @@
-export default ({ $config }) => {
+import Cookie from 'js-cookie';
+
+export default ({ $config, store }, inject ) => {
   window.initAuth = init;
   addScript()
 
+  inject('auth', {
+    signOut,
+  });
+
   function addScript() {
+    console.log()
     const script = document.createElement('script');
     script.src = 'https://accounts.google.com/gsi/client';
+    script.onload = () => {
+      initAuth();
+    }
     script.async = true;
     document.head.appendChild(script);
   }
 
-  function init(response) {
-    console.log(response)
+  function init() {
+    window.google.accounts.id.initialize({
+      client_id: $config.auth.clientId,
+      callback: parseUser,
+    });
+    window.google.accounts.id.renderButton(
+      document.getElementById('googleButton'),
+      { theme: "outline", size: "medium" }
+    );
+    window.google.accounts.id.prompt();
+  }
+  
+  function parseUser(response) {
+    const idToken = response.credential;
+    Cookie.set($config.auth.cookieName, idToken, { expires: 1/24, sameSite: 'Lax' })
 
-    const responsePayload = decodeJwtResponse(response.credential);
-    console.log(responsePayload)
+    const decodedResponse = decodeJwtResponse(response.credential);
+    console.log(response);
+    console.log(decodedResponse);
+    const userData = decodedResponse.payload;
+    console.log("ID (sub): " + userData.sub);
+    console.log("name: " + userData.name);
+    console.log("image URL: " + userData.picture);
 
-    // console.log("ID: " + responsePayload.sub);
+    store.commit('auth/user', {
+      fullName: userData.name,
+      profileUrl: userData.picture,
+    })
+
+    // setTimeout(() => {
+    //   window.google.accounts.id.disableAutoSelect();
+    // },5000);
+  }
+
+  function signOut() {
+    window.google.accounts.id.disableAutoSelect();
+    Cookie.remove($config.auth.cookieName);
+    store.commit('auth/user', null);
+    window.google.accounts.id.prompt();
   }
 
   function decodeJwtResponse(token) {
@@ -25,24 +67,20 @@ export default ({ $config }) => {
       throw new Error('Not enough or too many segments');
     }
 
-    // All segment should be base64
-    var headerSeg = segments[0];
-    var payloadSeg = segments[1];
-    var signatureSeg = segments[2];
-
     // base64 decode and parse JSON
-    var header = JSON.parse(base64urlDecode(headerSeg));
-    var payload = JSON.parse(base64urlDecode(payloadSeg));
+    const header = JSON.parse(base64urlDecode(segments[0]));
+    const payload = JSON.parse(base64urlDecode(segments[1]));
 
     return {
       header: header,
       payload: payload,
-      signature: signatureSeg
+      signature: segments[2]
     }
   }
 
   function base64urlDecode(str) {
-    return new Buffer(base64urlUnescape(str), 'base64').toString();
+    return Buffer.from(base64urlUnescape(str), 'base64').toString();
+    // return new Buffer(base64urlUnescape(str), 'base64').toString();
   };
   
   function base64urlUnescape(str) {

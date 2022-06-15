@@ -4,7 +4,7 @@ export default {
     MAPS_API_KEY: process.env.MAPS_API_KEY,
     ALGOLIA_SEARCH_API_KEY: process.env.ALGOLIA_SEARCH_API_KEY,
     auth: {
-      coockieName: 'idToken',
+      cookieName: 'idToken',
       clientId: process.env.GOOGLE_OAUTH_CLIENT_ID,
     }
   },
