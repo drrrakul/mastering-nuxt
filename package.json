@@ -1,6 +1,7 @@
 {
   "name": "mastering-nuxt",
   "dependencies": {
+    "cookie": "^0.5.0",
     "js-cookie": "^3.0.1",
     "nuxt": "^2.15.8"
   },
