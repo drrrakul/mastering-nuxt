@@ -1,4 +1,5 @@
 import Cookie from 'js-cookie';
+import { unWrap } from '~/utils/fetchUtils';
 
 export default ({ $config, store }, inject ) => {
   window.initAuth = init;
@@ -9,7 +10,6 @@ export default ({ $config, store }, inject ) => {
   });
 
   function addScript() {
-    console.log()
     const script = document.createElement('script');
     script.src = 'https://accounts.google.com/gsi/client';
     script.onload = () => {
@@ -20,6 +20,7 @@ export default ({ $config, store }, inject ) => {
   }
 
   function init() {
+    console.log(Cookie.get($config.auth.cookieName))
     window.google.accounts.id.initialize({
       client_id: $config.auth.clientId,
       callback: parseUser,
@@ -31,26 +32,29 @@ export default ({ $config, store }, inject ) => {
     window.google.accounts.id.prompt();
   }
   
-  function parseUser(response) {
+  async function parseUser(response) {
     const idToken = response.credential;
     Cookie.set($config.auth.cookieName, idToken, { expires: 1/24, sameSite: 'Lax' })
 
-    const decodedResponse = decodeJwtResponse(response.credential);
-    console.log(response);
-    console.log(decodedResponse);
-    const userData = decodedResponse.payload;
-    console.log("ID (sub): " + userData.sub);
-    console.log("name: " + userData.name);
-    console.log("image URL: " + userData.picture);
+    try {
+      const response = await unWrap(await fetch('api/user'))
+      const user = response.json
 
-    store.commit('auth/user', {
-      fullName: userData.name,
-      profileUrl: userData.picture,
-    })
+    /**
+     * Wywalone poniższe dwie linie, ponieważ nie dekodujemy już tokena funkcją,
+     * tylko zbieramy dane z naszego middleware (API Algolia proxy)
+     */
+    // const decodedResponse = decodeJwtResponse(response.credential);
+    // const userData = decodedResponse.payload;
 
-    // setTimeout(() => {
-    //   window.google.accounts.id.disableAutoSelect();
-    // },5000);
+      store.commit('auth/user', {
+        fullName: user.name,
+        profileUrl: user.image,
+      })
+    } catch(error) {
+      console.log(error)
+    }
+
   }
 
   function signOut() {

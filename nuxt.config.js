@@ -2,14 +2,20 @@ export default {
   components: true,
   publicRuntimeConfig: {
     MAPS_API_KEY: process.env.MAPS_API_KEY,
-    ALGOLIA_SEARCH_API_KEY: process.env.ALGOLIA_SEARCH_API_KEY,
     auth: {
       cookieName: 'idToken',
       clientId: process.env.GOOGLE_OAUTH_CLIENT_ID,
-    }
+    },
+    algolia: {
+      appId: process.env.ALGOLIA_API_ID,
+      key: process.env.ALGOLIA_SEARCH_API_KEY,
+    },
   },
   privateRuntimeConfig: {
-    ALGOLIA_ADMIN_API_KEY: process.env.ALGOLIA_ADMIN_API_KEY,
+    algolia: {
+      appId: process.env.ALGOLIA_API_ID,
+      key: process.env.ALGOLIA_UPDATE_API_KEY,
+    },
   },
   head: {
     titleTemplate: "Mastering Nuxt: %s",
@@ -27,7 +33,7 @@ export default {
     prefetchLinks: false,
   },
   plugins: ['~/plugins/maps.client', '~/plugins/dataApi', '~/plugins/auth.client'],
-  modules: ['~/modules/auth'],
+  modules: ['~/modules/auth', '~/modules/algolia'],
   devServerHandlers: [],
   buildModules: ['@nuxtjs/tailwindcss'],
   css: ['~/assets/sass/app.scss'],
