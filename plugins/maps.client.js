@@ -41,7 +41,7 @@ export default function(context, inject) {
   }
 
   function showMap(canvas, lat, lng, markers) {
-    console.log(arguments);
+    // console.log(arguments);
     if (!isLoaded) {
       waiting.push({
         fn: showMap,
