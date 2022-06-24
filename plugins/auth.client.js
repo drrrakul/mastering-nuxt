@@ -45,7 +45,7 @@ export default ({ $config, store }, inject ) => {
 
   async function signInVerify() {
     try {
-      const response = await unWrap(await fetch('api/user'))
+      const response = await unWrap(await fetch('/api/user'))
       const user = response.json
       store.commit('auth/user', {
         fullName: user.name,
