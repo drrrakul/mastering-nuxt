@@ -36,7 +36,7 @@ export default {
         signature,
       })
 
-      this.$emit('file-uploaded', asset.secure_url)
+      this.$emit('file-uploaded', asset.public_id)
     }
   }
 }
