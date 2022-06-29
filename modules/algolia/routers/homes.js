@@ -18,7 +18,7 @@ export default (apis) => {
     const payload = {
       ...body,
       reviewCount: 0,
-      reviewBody: 0,
+      reviewValue: 0,
       userId: identity.id,
     }
 
@@ -28,6 +28,7 @@ export default (apis) => {
       res.send()
       return
     }
+    await apis.user.assignHome(identity, homeId)
     sendJSON({}, res)
   }
 }
