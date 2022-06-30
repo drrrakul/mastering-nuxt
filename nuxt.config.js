@@ -13,6 +13,9 @@ export default {
     cloudinary: {
       apiKey: process.env.CLOUDINARY_API_KEY,
     },
+    stripe: {
+      key: process.env.STRIPE_PUBLISHABLE_KEY,
+    },
   },
   privateRuntimeConfig: {
     algolia: {
@@ -22,6 +25,9 @@ export default {
     cloudinary: {
       apiSecret: process.env.CLOUDINARY_API_SECRET,
     },
+    stripe: {
+      secretKey: process.env.STRIPE_SECRET_KEY,
+    }
   },
   head: {
     titleTemplate: "Mastering Nuxt: %s",
@@ -42,9 +48,16 @@ export default {
     '~/plugins/maps.client',
     '~/plugins/dataApi',
     '~/plugins/auth.client',
-    '~/plugins/vCalendar.client'
+    '~/plugins/vCalendar.client',
+    '~/plugins/stripe.client',
   ],
-  modules: ['~/modules/auth', '~/modules/algolia', '~/modules/cloudinary', '@nuxtjs/cloudinary'],
+  modules: [
+    '~/modules/auth',
+    '~/modules/algolia',
+    '~/modules/cloudinary',
+    '@nuxtjs/cloudinary',
+    '~/modules/stripe',
+  ],
   devServerHandlers: [],
   buildModules: ['@nuxtjs/tailwindcss', '@nuxt/image'],
   cloudinary: {
