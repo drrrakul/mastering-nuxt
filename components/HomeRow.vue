@@ -1,6 +1,7 @@
 <template>
   <div>
-    <nuxt-img class="app-house-header"
+    <div v-if="home.images[0].includes('//')" class="app-house-header" :style="`background-image: url(${home.images[0]})`"></div>
+    <nuxt-img v-else class="app-house-header"
       provider="cloudinary"
       width="360"
       height="200"
