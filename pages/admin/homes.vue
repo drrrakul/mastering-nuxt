@@ -137,8 +137,6 @@ export default {
       return parts.find(part => part.types.includes(type));
     },
     async onSubmit() {
-      console.log(this.home.availabilityRanges[0].start.getTime())
-      return
       const response = await unWrap(await fetch("/api/homes", {
         method: "POST",
         body: JSON.stringify(this.home),
