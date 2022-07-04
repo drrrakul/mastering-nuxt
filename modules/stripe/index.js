@@ -8,8 +8,18 @@ export default function() {
   const secretKey = this.options.privateRuntimeConfig.stripe.secretKey
   const stripe = stripeLib(secretKey)
   const cloudName = this.options.cloudinary.cloudName
+  const rootUrl = this.options.rootUrl
+  
   this.nuxt.hook('render:setupMiddleware', app => {
     app.use('/api/stripe/create-session', createSession)
+  })
+
+  this.nuxt.hook('render:setupMiddleware', app => {
+    app.use('/hooks/stripe', async (req, res, next) => {  
+      const meta = req.body.data.object.metadata
+      await apis.user.bookHome(meta.identityId, meta.homeId, meta.start, meta.end)
+      res.end(`${meta.identityId} booked ${meta.homeId}!!!`)
+    })
   })
 
   async function createSession(req, res) {
@@ -20,10 +30,16 @@ export default function() {
     const home = (await apis.homes.get(body.homeId)).json
     const nights = (body.end - body.start) / 86400
     const session = await stripe.checkout.sessions.create({
+      metadata: {
+        identityId: req.identity.id,
+        homeId: body.homeId,
+        start: body.start,
+        end: body.end,
+      },
       payment_method_types: ['card'],
       mode: 'payment',
-      success_url: `http://localhost:3000/home/${body.homeId}?result=success`,
-      cancel_url: `http://localhost:3000/home/${body.homeId}`,
+      success_url: `${rootUrl}/home/${body.homeId}?result=success`,
+      cancel_url: `${rootUrl}/home/${body.homeId}`,
       line_items: [{
         quanity: 1,
         price_data: {
