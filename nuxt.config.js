@@ -1,5 +1,4 @@
 export default {
-  rootUrl: process.env.NODE_ENV === 'production' ? 'https://drrrakul-b-b.vercel.app' : 'http://localhost:3000',
   components: true,
   publicRuntimeConfig: {
     rootUrl: process.env.NODE_ENV === 'production' ? 'https://drrrakul-b-b.vercel.app' : 'http://localhost:3000',
